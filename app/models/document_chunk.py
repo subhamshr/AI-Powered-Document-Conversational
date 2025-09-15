@@ -6,6 +6,20 @@ from app.core.database import Base
 
 
 class DocumentChunk(Base):
+    """
+    SQLAlchemy ORM model for storing chunks of documents.
+
+    Each document can be split into multiple chunks for processing
+    in a Retrieval-Augmented Generation (RAG) system or other NLP tasks.
+
+    Attributes:
+        id (int): Primary key, auto-incremented.
+        doc_id (str): Identifier of the original document.
+        chunk_id (str): Unique identifier for this chunk.
+        filename (str): Name of the original uploaded file.
+        upload_time (datetime): Timestamp when the chunk was created.
+        chunk_text_snippet (str): Text content of the chunk.
+    """
     __tablename__ = "document_chunks"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)

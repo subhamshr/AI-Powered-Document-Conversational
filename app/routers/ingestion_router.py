@@ -8,10 +8,21 @@ from app.core.database import get_db
 
 
 doucment_router=APIRouter()
-# , response_model=IngestionResponse
 @doucment_router.post("/upload")
+
 async def upload_document(file: UploadFile = File(...),db: AsyncSession = Depends(get_db),strategy: str = Query("recursive", description="Chunking strategy: recursive or semantic")
 ):
+    """
+    Upload a document and process it into chunks for the RAG system.
+
+    This endpoint accepts a PDF or TXT file, splits it into chunks based on the
+    selected strategy, generates embeddings, and stores them in the database.
+
+    Args:
+        file (UploadFile): The document file to upload.
+        db (AsyncSession): Database session injected via dependency.
+        strategy (str): Chunking strategy, either 'recursive' or 'semantic'. Defaults to 'recursive'.
+    """
     try:
         doc_id, chunk_ids = await ingest_document(session=db, file=file, strategy=strategy)  # returns list of tuples (id, embedding, metadata)
     

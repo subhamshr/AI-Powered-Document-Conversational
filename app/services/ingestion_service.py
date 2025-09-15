@@ -11,13 +11,25 @@ from app.models.document_chunk import DocumentChunk
 from app.schema.rag_schema import DocumentChunkBase
 
 async def ingest_document(session: AsyncSession,file: UploadFile,strategy: str = "recursive") -> str:
+    """
+    Ingest a document: read file, split into chunks, generate embeddings, and store in DB and vector index.
+
+    Args:
+        session (AsyncSession): Async database session for storing chunks.
+        file (UploadFile): Uploaded document file (.pdf or .txt).
+        strategy (str): Chunking strategy ('recursive' or 'semantic'). Defaults to 'recursive'.
+
+    Returns:
+        tuple[str, list[str]]: A tuple containing:
+            - doc_id (str): Unique ID for the ingested document.
+            - chunk_ids (list[str]): List of generated chunk IDs.
+    """
     text=await file_reader(file)
     doc_id = str(uuid.uuid4())
     chunks = chunk_text(text)
     vectors_to_upsert = []
     chunk_ids = []
     for chunk in chunks:
-        # If chunk is a Document object, use chunk.page_content instead
         text = chunk.page_content if hasattr(chunk, "page_content") else chunk
         chunk_id = str(uuid.uuid4())
         chunk_ids.append(chunk_id)
@@ -38,10 +50,22 @@ async def ingest_document(session: AsyncSession,file: UploadFile,strategy: str =
     return doc_id, chunk_ids
 
 async def file_reader(file: UploadFile):
-    file_bytes = await file.read()  # read bytes from UploadFile
+    """
+    Read the content of an uploaded file (.txt or .pdf) asynchronously.
+
+    Args:
+        file (UploadFile): Uploaded file.
+
+    Returns:
+        str: Extracted text content of the file.
+
+    Raises:
+        HTTPException: If file format is unsupported.
+    """
+    file_bytes = await file.read() 
 
     if file.filename.endswith(".txt"):
-        content = await load_txt(file_bytes)  # await the async function
+        content = await load_txt(file_bytes)  
     elif file.filename.endswith(".pdf"):
         content = await load_pdf(file_bytes)
     else:
