@@ -52,13 +52,13 @@ DATABASE_URL=postgresql://user:password@db:5432/app_db
 # Redis connection (for chat memory & caching)
 REDIS_URL=redis://redis:6379
 
-# Pinecone or other vector store API key (if using)
+# Pinecone API key
 PINECONE_API_KEY=your_pinecone_api_key_here
 
 # Pinecone environment
 PINECONE_ENV=your_pinecone_environment_here
-
-
+```
+ 
 3. **🐳 Build & Run with Docker**
 
 Use Docker Compose to build and start the application:
