@@ -43,20 +43,25 @@ It also includes:
 Create a `.env` file in the root directory with the following variables:
 
 ```env
-# OpenAI API Key (for embedding & LLM calls)
+# PostgreSQL database configuration
+POSTGRES_USER=your_postgres_username
+POSTGRES_PASSWORD=your_postgres_password
+POSTGRES_DB=your_database_name
+POSTGRES_PORT=your_database_port
+POSTGRES_HOST=your_database_host
+
+# OpenAI API Key (for embeddings & LLM calls)
 OPENAI_API_KEY=your_openai_api_key_here
 
-# Database connection string (PostgreSQL example)
-DATABASE_URL=postgresql://user:password@db:5432/app_db
+# Redis configuration
+REDIS_HOST=your_redis_host
+REDIS_PORT=your_redis_port
 
-# Redis connection (for chat memory & caching)
-REDIS_URL=redis://redis:6379
-
-# Pinecone API key
+# Pinecone API Key and environment
 PINECONE_API_KEY=your_pinecone_api_key_here
-
-# Pinecone environment
 PINECONE_ENV=your_pinecone_environment_here
+
+
 ```
  
 3. **🐳 Build & Run with Docker**
